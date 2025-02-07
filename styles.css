@@ -1,7 +1,6 @@
 body{
-    background-color: #000000;
     opacity: 1;
-    background-image: radial-gradient(#222222 1.05px, #000000 1.05px);
+    background-image: radial-gradient(#222222 1.05px, #273955 1.05px);
     background-size: 21px 21px;
     color: #d5f365;
     font-family: "Raleway", serif;
@@ -11,9 +10,8 @@ body{
 h1{
     color: #d5f365;
     font-family: "Raleway", serif;
-    font-size: xxx-large;
+    /* font-size: xxx-large; */
 }
-
 p{
     display: block;
     margin: auto;
