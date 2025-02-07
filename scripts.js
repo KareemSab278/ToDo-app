@@ -3,16 +3,16 @@
 // Add Unique IDs to Tasks => DONE
 // Modify the ToDo class to include a unique ID for each task. => DONE
 // Increment the ID each time a new task is created. => DONE
+// Implement Task Deletion by ID => DONE
+// Update the deleteTask function to delete tasks based on their unique ID. => DONE
 
-// Implement Task Deletion by ID
+// serialize the obj using JSON.stringify and then parse it back to obj using JSON.parse
+// https://www.youtube.com/watch?v=AUOzvFzdIk4
 
-// Update the deleteTask function to delete tasks based on their unique ID.
-// This ensures that the correct task is removed from both the UI and the data array.
-// Save and Load Tasks from Local Storage
+// Save and Load Tasks from Local Storage using localStorage
 
 // Implement functions to save tasks to localStorage whenever they are added or deleted.
 // Load tasks from localStorage when the app initializes to persist data across sessions.
-
 
 //=======================================================================
 
@@ -25,6 +25,20 @@ let todoForm = document.getElementById("todo-form");
 let todoText = document.getElementById("todo-text");
 let output = document.getElementById("output"); // the p element will hold this text
 
+//=======================================================================
+
+// Load tasks from localStorage when the app initializes
+window.addEventListener('load', () => {
+  let storedData = localStorage.getItem("data");
+  if (storedData) {
+    data = JSON.parse(storedData);
+    idCount = data.tasks.length > 0 ? data.tasks[data.tasks.length - 1].id + 1 : 1;
+    data.tasks.forEach(task => {
+      document.getElementById("output").innerHTML += `<p class="task" data-id="${task.id}"><br>${task.id} - ${task.details} - ${new Date(task.date).toLocaleString('en-GB', { timeZone: 'UTC' })} 
+      <button data-id="${task.id}" onclick="deleteTask(this)" class="button">finished task</button></br></p>`;
+    });
+  }
+});
 
 //======================================================================= HANDLING THE INPUT FORM
 
@@ -42,10 +56,15 @@ todoForm.addEventListener("submit", (e) => {
       idCount++; // increment on every new task
 
       data.tasks.push(todo);
-
-      console.log("Added new task: ", todoText.value); // on submit
+      let data_serialized = JSON.stringify(data); //serialize the object to json
+      localStorage.setItem("data", data_serialized); //store the object in local storage
+      let data_deserialized = JSON.parse(localStorage.getItem("data")); //parse the object back to json
+      //test:
+      console.log(data_deserialized)
+      return data_deserialized;
+      // console.log("Added new task: ", todoText.value); // on submit
   }
-  console.log(data.tasks);
+  // console.log(data.tasks);
   return data;
 });
 
@@ -71,9 +90,14 @@ const deleteTask = (btn) => {
   if (taskElement) {
       taskElement.remove();
   }
-
-  console.log("Removed task with ID:", taskId);
-  console.log(data.tasks);
+  let data_serialized = JSON.stringify(data); //serialize the object to json
+  localStorage.setItem("data", data_serialized); //store the object in local storage
+  let data_deserialized = JSON.parse(localStorage.getItem("data")); //parse the object back to json
+  //test:
+  console.log(data_deserialized)
+  return data_deserialized;
+  // console.log("Removed task with ID:", taskId);
+  // console.log(data.tasks);
 };
 
 
@@ -85,5 +109,19 @@ class ToDo {
   }
 }
 
-  
-  
+//======================================================================= LOCAL STORAGE 
+
+
+// window.addEventListener('load', () => {
+//   let storedData = localStorage.getItem("data");
+//   if (storedData) {
+//     data = JSON.parse(storedData);
+//     idCount = data.tasks.length > 0 ? data.tasks[data.tasks.length - 1].id + 1 : 1;
+//     data.tasks.forEach(task => {
+//       document.getElementById("output").innerHTML += `<p class="task" data-id="${task.id}"><br>${task.id} - ${task.details} - ${new Date(task.date).toLocaleString('en-GB', { timeZone: 'UTC' })} 
+//       <button data-id="${task.id}" onclick="deleteTask(this)" class = "button">finished task</button></br></p>`;
+//     });
+//   }
+// });
+
+
