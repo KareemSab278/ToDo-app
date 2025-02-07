@@ -1,6 +1,7 @@
 body{
     opacity: 1;
-    background-image: radial-gradient(#222222 1.05px, #273955 1.05px);
+    background-color: #273955;
+    /* background-image: radial-gradient(#222222 1.05px, #273955 1.05px); */
     background-size: 21px 21px;
     color: #d5f365;
     font-family: "Raleway", serif;
@@ -22,4 +23,16 @@ p{
     justify-content: center;
     text-align: center;
     font-size: x-large;
+}
+.button{
+    color: #273955;
+    font-family: "Raleway", serif;
+    font-size: large;
+    border-radius: 10px;
+}
+.form-control{
+    color: #273955;
+    font-family: "Raleway", serif;
+    font-size: large;
+    border-radius: 10px;
 }

@@ -34,17 +34,18 @@ todoForm.addEventListener("submit", (e) => {
   if (!todoText.value) {
       console.error("trying to procrastinate, are we?");
   } else {
+    // document.getElementById("output").innerHTML = ""; // clear the output on every new task
       let todo = new ToDo(idCount, todoText.value, new Date());
 
       document.getElementById("output").innerHTML += `<p class="task" data-id="${idCount}"><br>${idCount} - ${todoText.value} - ${new Date().toLocaleString('en-GB', { timeZone: 'UTC' })} 
-      <button data-id="${idCount}" onclick="deleteTask(this)">finished task</button></br></p>`;
+      <button data-id="${idCount}" onclick="deleteTask(this)" class = "button">finished task</button></br></p>`;
       idCount++; // increment on every new task
 
       data.tasks.push(todo);
 
       console.log("Added new task: ", todoText.value); // on submit
   }
-  console.log(data);
+  console.log(data.tasks);
   return data;
 });
 
@@ -72,6 +73,7 @@ const deleteTask = (btn) => {
   }
 
   console.log("Removed task with ID:", taskId);
+  console.log(data.tasks);
 };
 
 
