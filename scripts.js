@@ -1,21 +1,3 @@
-// THIS TASK WAS DONE FOR ME TO UNDERSTAND OBJECT ORIENTED PROGRAMMING BETTER. ALL CODE WAS WRITTEN BY ME, NO TUTORIAL WAS USED.
-
-// Add Unique IDs to Tasks => DONE
-// Modify the ToDo class to include a unique ID for each task. => DONE
-// Increment the ID each time a new task is created. => DONE
-// Implement Task Deletion by ID => DONE
-// Update the deleteTask function to delete tasks based on their unique ID. => DONE
-
-// serialize the obj using JSON.stringify and then parse it back to obj using JSON.parse
-// https://www.youtube.com/watch?v=AUOzvFzdIk4
-
-// Save and Load Tasks from Local Storage using localStorage
-
-// Implement functions to save tasks to localStorage whenever they are added or deleted.
-// Load tasks from localStorage when the app initializes to persist data across sessions.
-
-//=======================================================================
-
 let data = {        //this object will be holding the data. gotta move to json file and find a way to delete data by id or something.
     tasks: []       //probably will get the indexOf and then delete by the element position but that seems overkill.
 };                  
@@ -25,50 +7,61 @@ let todoForm = document.getElementById("todo-form");
 let todoText = document.getElementById("todo-text");
 let output = document.getElementById("output"); // the p element will hold this text
 
-//=======================================================================
+function renderTask(task) {
+  const list = document.getElementById('task-list');
+  const taskElement = document.createElement('div');
+  taskElement.className = 'task';
+  taskElement.dataset.id = task.id;
 
-// Load tasks from localStorage when the app initializes
+  const taskText = document.createElement('span');
+  taskText.className = 'task-text';
+  taskText.textContent = `${task.id} - ${task.details}`;
+
+  const taskDate = document.createElement('small');
+  taskDate.className = 'task-date';
+  taskDate.textContent = `${new Date(task.date).toLocaleString('en-GB', { timeZone: 'UTC' })}`;
+
+  const removeButton = document.createElement('button');
+  removeButton.type = 'button';
+  removeButton.dataset.id = task.id;
+  removeButton.textContent = 'Finished';
+  removeButton.addEventListener('click', () => deleteTask(removeButton));
+
+  taskElement.appendChild(taskText);
+  taskElement.appendChild(taskDate);
+  taskElement.appendChild(removeButton);
+  list.appendChild(taskElement);
+}
+
 window.addEventListener('load', () => {
-  let storedData = localStorage.getItem("data");
+  let storedData = localStorage.getItem('data');
   if (storedData) {
     data = JSON.parse(storedData);
     idCount = data.tasks.length > 0 ? data.tasks[data.tasks.length - 1].id + 1 : 1;
-    data.tasks.forEach(task => {
-      document.getElementById("output").innerHTML += `<p class="task" data-id="${task.id}"><br>${task.id} - ${task.details} - ${new Date(task.date).toLocaleString('en-GB', { timeZone: 'UTC' })} 
-      <button data-id="${task.id}" onclick="deleteTask(this)" class="button">finished task</button></br></p>`;
-    });
+    data.tasks.forEach(task => renderTask(task));
   }
 });
 
-//======================================================================= HANDLING THE INPUT FORM
 
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
   
   if (!todoText.value) {
-      console.error("trying to procrastinate, are we?");
+      return;
   } else {
-    // document.getElementById("output").innerHTML = ""; // clear the output on every new task
       let todo = new ToDo(idCount, todoText.value, new Date());
 
-      document.getElementById("output").innerHTML += `<p class="task" data-id="${idCount}"><br>${idCount} - ${todoText.value} - ${new Date().toLocaleString('en-GB', { timeZone: 'UTC' })} 
-      <button data-id="${idCount}" onclick="deleteTask(this)" class = "button">finished task</button></br></p>`;
-      idCount++; // increment on every new task
-
       data.tasks.push(todo);
-      let data_serialized = JSON.stringify(data); //serialize the object to json
-      localStorage.setItem("data", data_serialized); //store the object in local storage
-      let data_deserialized = JSON.parse(localStorage.getItem("data")); //parse the object back to json
-      //test:
-      console.log(data_deserialized)
-      return data_deserialized;
-      // console.log("Added new task: ", todoText.value); // on submit
+      localStorage.setItem('data', JSON.stringify(data));
+
+      renderTask(todo);
+      idCount++;  
+
+      todoText.value = '';
+      return data;
   }
-  // console.log(data.tasks);
   return data;
 });
-
-//======================================================================= HANDLING THE OUTPUT
 
 
 const deleteTask = (btn) => {
@@ -93,11 +86,7 @@ const deleteTask = (btn) => {
   let data_serialized = JSON.stringify(data); //serialize the object to json
   localStorage.setItem("data", data_serialized); //store the object in local storage
   let data_deserialized = JSON.parse(localStorage.getItem("data")); //parse the object back to json
-  //test:
-  console.log(data_deserialized)
   return data_deserialized;
-  // console.log("Removed task with ID:", taskId);
-  // console.log(data.tasks);
 };
 
 
@@ -108,20 +97,3 @@ class ToDo {
       this.date = date;
   }
 }
-
-//======================================================================= LOCAL STORAGE 
-
-
-// window.addEventListener('load', () => {
-//   let storedData = localStorage.getItem("data");
-//   if (storedData) {
-//     data = JSON.parse(storedData);
-//     idCount = data.tasks.length > 0 ? data.tasks[data.tasks.length - 1].id + 1 : 1;
-//     data.tasks.forEach(task => {
-//       document.getElementById("output").innerHTML += `<p class="task" data-id="${task.id}"><br>${task.id} - ${task.details} - ${new Date(task.date).toLocaleString('en-GB', { timeZone: 'UTC' })} 
-//       <button data-id="${task.id}" onclick="deleteTask(this)" class = "button">finished task</button></br></p>`;
-//     });
-//   }
-// });
-
-
